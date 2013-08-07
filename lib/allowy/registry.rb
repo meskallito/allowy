@@ -19,6 +19,9 @@ module Allowy
       # Try subject as a class
       clazz = class_for "#{subject.name}Access" if !clazz && [Class, ActiveRecord::Associations::CollectionProxy].any? { |klass| subject.is_a?(klass) }
 
+      # Try subject as a array
+      clazz = class_for "#{subject[0].class.name}Access" if !clazz && subject.is_a?(Array)
+
       return unless clazz # No luck this time
       # create a new instance or return existing
       @registry[clazz] ||= clazz.new(@context)
